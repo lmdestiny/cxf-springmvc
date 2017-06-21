@@ -114,24 +114,24 @@ public class TicketServiceImpl implements TicketService{
 	@Override
 	public TransResult pay(String plate,String type,Long count,String startC,String endC) {
 		Ticket ticket = ticketDao.find(plate);
-		List<TicketEntity> entity = ticket.getEntitys();
-		List<TicketEntity> entitys = new ArrayList<TicketEntity>();
+		List<TicketEntity> entitys = ticket.getEntitys();
+		/*List<TicketEntity> entitys = new ArrayList<TicketEntity>();*/
 		int sc =0;
 		int ec = 0;
-		for(int i=0;i<entitys.size();i++) {
+		for(int i=0;i<entitys.size();i=i+3) {
 			if(entitys.get(i).getStartC().equals(startC)) {
 				sc = i;
 				break;
 			}
 		}
 		
-		for(int i=0;i<entitys.size();i++) {
+		for(int i=0;i<entitys.size();i=i+3) {
 			if(entitys.get(i).getEndC().equals(endC)) {
 					ec =i;
 					break;
 				}
 		}
-		for(int i=sc;i<=ec ;i++) {
+		for(int i=sc;i<=ec ;i=i+3) {
 			Long long1 = entitys.get(i).getCountT().get(type);
 			if(long1-count<0) {
 				return TransResult.build(400, "票数不足");
