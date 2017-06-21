@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+	
+	<!-- 注释扫描路径 -->
+	<context:component-scan base-package="
+	com.lmdestiny.model,
+	com.lmdestiny.dao,
+	com.lmdestiny.service.impl,
+	com.lmdestiny.controller"/>
+	<context:property-placeholder location="classpath:*.properties" order="2"/>
+	<!-- 事务管理使用注释 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<!-- 使用GBLIB，基于类创建代理对象，用于业务层事务 -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	
+	<!-- 配置数据源 -->
+	<bean id="druidDataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+		<property name="url" value="${jdbc.url}"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+		<property name="driverClassName" value="${jdbc.driverclass}"/>
+		<property name="maxActive" value="${pool.maxActive}"/>
+		<property name="minIdle"  value="${pool.minIdle}"/>
+	</bean>
+	<!-- 本地回话工厂bean(spring整合hibernate的核心入口) -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="druidDataSource" />
+		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
+		<property name="packagesToScan" value="com.lmdestiny.model"></property>
+	</bean>
+	
+	<!-- hibnerate事务管理器,用来在service层面上实现事务管理,而且达到平台无关性 -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="globalRollbackOnParticipationFailure" value="false" /> 
+	</bean>
+</beans>

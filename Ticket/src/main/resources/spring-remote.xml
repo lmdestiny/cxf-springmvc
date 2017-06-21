@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://schemas.xmlsoap.org/wsdl/ http://schemas.xmlsoap.org/wsdl/2003-02-11.xsd">
+		<jaxws:server id="first" serviceClass="com.lmdestiny.service.TicketService" address="/ticketws">
+		<jaxws:serviceBean>
+			<bean class="com.lmdestiny.service.impl.TicketServiceImpl"/>
+		</jaxws:serviceBean>
+		</jaxws:server>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+<!-- 	<bean id="webService" class="org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean">
+    <property name="serviceInterface" value="com.lmdestiny.service.TicketService"/>
+    <property name="wsdlDocumentUrl" value="http://localhost:8080/ticketService?WSDL"/>
+    <property name="namespaceUri" value="http://localhost:8080/ticketService"/>
+    <property name="serviceName" value="ticketService"/>
+    <property name="portName" value="pn"/>
+</bean> -->
+<!-- <bean class="org.springframework.remoting.jaxws.SimpleJaxWsServiceExporter">
+	<property name="baseAddress" value="http://localhost:9999/"></property>
+</bean> -->
+</beans>
